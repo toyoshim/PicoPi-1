@@ -14,7 +14,9 @@
       },
       "command": "cargo",
       "args": [
-        "build"
+        "build",
+        "--bin",
+        "main"
       ],
       "problemMatcher": [
         "$rustc"

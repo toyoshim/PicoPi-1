@@ -8,3 +8,9 @@ openocd/src/openocd:
 		./bootstrap && \
 		./configure --enable-picoprobe --disable-werror && \
 		make -j4
+
+host:
+	(cd firmware; cargo run --target `rustup show|head -n 1|awk -F ' ' '{ print $$3 }'` --bin $@)
+
+rimconv:
+	(cd firmware; cargo build --target `rustup show|head -n 1|awk -F ' ' '{ print $$3 }'` --bin $@)

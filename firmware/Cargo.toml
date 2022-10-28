@@ -1,9 +1,9 @@
 [package]
 edition = "2021"
-name = "rp2040-project-template"
+name = "pico_pi_1"
 version = "0.1.0"
 
-[dependencies]
+[target.thumbv6m-none-eabi.dependencies]
 cortex-m = "0.7"
 cortex-m-rt = "0.7"
 embedded-hal = { version = "0.2.5", features = ["unproven"] }

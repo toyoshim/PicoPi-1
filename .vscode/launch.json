@@ -6,7 +6,7 @@
             "name": "Cargo Debug with OpenOCD",
             "cwd": "${workspaceFolder}/firmware",
             "preLaunchTask": "Cargo Build (debug)",
-            "executable": "target/thumbv6m-none-eabi/debug/rp2040-project-template",
+            "executable": "target/thumbv6m-none-eabi/debug/main",
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",

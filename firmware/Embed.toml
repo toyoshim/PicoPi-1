@@ -19,7 +19,8 @@ halt_afterwards = false
 
 [default.general]
 chip = "RP2040"
-log_level = "WARN"
+#log_level = "WARN"
+log_level = "INFO"
 # RP2040 does not support connect_under_reset
 connect_under_reset = false
 
