@@ -1,0 +1,29 @@
+// The format of this file is specified in https://probe.rs/docs/tools/vscode/#start-a-debug-session-with-minimum-configuration
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cargo Debug with OpenOCD",
+            "cwd": "${workspaceFolder}/firmware",
+            "preLaunchTask": "Cargo Build (debug)",
+            "executable": "target/thumbv6m-none-eabi/debug/rp2040-project-template",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "parsed",
+            "preLaunchCommands": [
+                "monitor arm semihosting enable"
+            ],
+            "servertype": "openocd",
+            "searchDir": [
+                "${workspaceFolder}/openocd/tcl"
+            ],
+            "device": "rp2040",
+            "configFiles": [
+                "interface/picoprobe.cfg",
+                "target/rp2040.cfg",
+            ],
+            "svdFile": "${workspaceRoot}/rp2040.svd",
+        }
+    ]
+}

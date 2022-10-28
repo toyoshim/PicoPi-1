@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "setup",
+      "type": "process",
+      "command": "make"
+    },
+    {
+      "label": "Cargo Build (debug)",
+      "type": "process",
+      "options": {
+        "cwd": "${workspaceFolder}/firmware"
+      },
+      "command": "cargo",
+      "args": [
+        "build"
+      ],
+      "problemMatcher": [
+        "$rustc"
+      ],
+      "group": {
+        "kind": "build"
+      },
+      "dependsOn": [
+        "setup"
+      ]
+    }
+  ]
+}

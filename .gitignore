@@ -1,9 +1,11 @@
 *-backups
+.gdb_history
+.vscode/.cortex-debug.*
 .DS_Store
 fp-info-cache
 gerber.zip
-.gdb_history
 firmware/**/*.rs.bk
 firmware/.#*
 firmware/Cargo.lock
 firmware/target/
+rp2040.svd
