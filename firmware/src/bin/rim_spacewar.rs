@@ -1,10 +1,21 @@
+use crate::rim::Rim;
 pub struct RimSpacewar {
-    data: Vec<i32>,
+    offset: u16,
+    data: Vec<u32>,
+}
+
+impl Rim for RimSpacewar {
+    fn next(&mut self) -> u32 {
+        let value = self.data[self.offset as usize];
+        self.offset += 1;
+        return value;
+    }
 }
 
 impl RimSpacewar {
     pub fn new() -> Self {
         RimSpacewar {
+            offset: 0,
             data: vec![
                 0x01afe9, 0x03b002, 0x01afea, 0x01aff0, 0x01afeb, 0x008ff0, 0x01afec, 0x01affe,
                 0x01afed, 0x03b002, 0x01afee, 0x01afff, 0x01afef, 0x03b002, 0x01aff0, 0x000000,
