@@ -1,0 +1,99 @@
+
+(rules PCB PicoPi-1
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 517)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 2.1)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.9)
+    )
+  )
+  (rule
+    (width 500.0)
+    (clear 200.2)
+    (clear 250.0 (type smd_to_turn_gap))
+    (clear 50.0 (type smd_smd))
+  )
+  (padstack "Via[0-1]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
+  )
+  (via 
+    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_800:400_um-Power" "Via[0-1]_800:400_um" Power
+  )
+  (via_rule
+    default "Via[0-1]_800:400_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_800:400_um-kicad_default"
+  )
+  (via_rule
+    Power "Via[0-1]_800:400_um-Power"
+  )
+  (class default
+    /G1 /B1 /B2 /B3 /B4 /G2 /X /Y
+    /X9 /X8 "Net-(R11-Pad2)" /X7 "Net-(R12-Pad2)" /X6 "Net-(R13-Pad2)" /X5
+    "Net-(R14-Pad2)" /X4 "Net-(R15-Pad2)" /X3 "Net-(R16-Pad2)" /X2 "Net-(R17-Pad2)" /X1
+    "Net-(R18-Pad2)" /X0 "Net-(R10-Pad2)" /Y9 /Y8 "Net-(R22-Pad2)" /Y7 "Net-(R23-Pad2)"
+    /Y6 "Net-(R24-Pad2)" /Y5 "Net-(R25-Pad2)" /Y4 "Net-(R26-Pad2)" /Y3 "Net-(R27-Pad2)"
+    /Y2 "Net-(R28-Pad2)" /Y1 "Net-(R29-Pad2)" /Y0 "Net-(R30-Pad2)" "unconnected-(J1-Pad30)" "unconnected-(J1-Pad35)"
+    "unconnected-(J1-Pad37)" "unconnected-(J1-Pad39)" "unconnected-(J1-Pad40)"
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 500.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    (clearance_class "kicad_default")
+    (via_rule kicad_default)
+    (rule
+      (width 500.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class Power
+    GND +3.3V
+    (clearance_class Power)
+    (via_rule Power)
+    (rule
+      (width 1000.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)
