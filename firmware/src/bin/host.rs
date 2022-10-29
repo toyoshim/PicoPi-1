@@ -7,7 +7,8 @@ fn main() {
     let mut rim = RimSpacewar::new();
     let mut cm = CoreMemory::new();
     let pc = rim.bootstrap(&mut cm);
-    println!("PC: {:06o}", pc);
     let mut cpu = Pdp1::new(&mut cm, &mut rim, pc);
-    cpu.step();
+    loop {
+        cpu.step();
+    }
 }

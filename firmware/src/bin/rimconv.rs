@@ -1,15 +1,29 @@
 use std::io;
 
 fn read<R: io::Read>(read: &mut R) -> Result<u32, io::Error> {
-    let mut buffer = [0; 3];
-    match read.read(&mut buffer) {
+    let mut head = [0; 1];
+    loop {
+        match read.read(&mut head) {
+            Ok(size) => {
+                if 1 != size {
+                    return Err(io::Error::from(io::ErrorKind::UnexpectedEof));
+                }
+                if 0 != (head[0] & 0x80) {
+                    break;
+                }
+            }
+            Err(e) => return Err(e),
+        }
+    }
+    let mut body = [0; 2];
+    match read.read(&mut body) {
         Ok(size) => {
-            if 3 != size {
+            if 2 != size {
                 return Err(io::Error::from(io::ErrorKind::UnexpectedEof));
             }
-            return Ok(((buffer[0] as u32 & 0x3f) << 12)
-                | ((buffer[1] as u32 & 0x3f) << 6)
-                | ((buffer[2] as u32 & 0x3f) << 0));
+            return Ok(((head[0] as u32 & 0x3f) << 12)
+                | ((body[0] as u32 & 0x3f) << 6)
+                | ((body[1] as u32 & 0x3f) << 0));
         }
         Err(e) => return Err(e),
     }
