@@ -14,6 +14,8 @@ pub struct Pdp1<'a> {
     rim: &'a mut dyn Rim,
 }
 
+static FLAGS: [u8; 8] = [0x00, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01, 0x3f];
+
 impl<'a> Pdp1<'a> {
     pub fn new(cm: &'a mut CoreMemory, rim: &'a mut dyn Rim, pc: u16) -> Self {
         Pdp1 {
@@ -227,7 +229,7 @@ impl<'a> Pdp1<'a> {
             }
             0o064 => {
                 // 064 SKP
-                // TODO
+                self.skp(0 != ir & (1 << 12));
             }
             0o066 => {
                 // 066 SFT (5 usec)
@@ -235,7 +237,7 @@ impl<'a> Pdp1<'a> {
             }
             0o070 => {
                 // 070 LAW (5 usec)
-                if 0 == (ir & (1 << 12)) {
+                if 0 == ir & (1 << 12) {
                     self.ac = self.y as u32;
                 } else {
                     self.ac = self.y as u32 ^ 0x3ffff;
@@ -288,11 +290,10 @@ impl<'a> Pdp1<'a> {
             self.io = 0;
         }
         if 0 != cmd & 0x007 {
-            static FLAGS: [u8; 8] = [0x00, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01, 0x3f];
             let mask = FLAGS[(cmd & 7) as usize];
             if 0 == cmd & 0x008 {
                 // CLF
-                self.pf &= mask;
+                self.pf &= !mask;
             } else {
                 // STF
                 self.pf |= mask;
@@ -300,6 +301,35 @@ impl<'a> Pdp1<'a> {
         }
         if 0 != cmd & 0x070 {
             panic!("Illegal Operation: {:04o}", cmd);
+        }
+    }
+
+    fn skp(&mut self, ind: bool) {
+        let mut skip = false;
+        if (0 != self.y & 0x040 && 0 == self.ac)
+            || (0 != self.y & 0x080 && 0 == self.ac & 0x20000)
+            || (0 != self.y & 0x100 && 0 != self.ac & 0x20000)
+            || (0 != self.y & 0x200 && !self.ov)
+            || (0 != self.y & 0x400 && 0 == self.io & 0x20000)
+        {
+            skip = true;
+        }
+        if 0 != self.y & 0x038 {
+            skip = true;
+        }
+        if 0 != self.y & 0x007 {
+            if 0 == self.pf & FLAGS[(self.y & 007) as usize] {
+                skip = true;
+            }
+        }
+        if 0 != self.y & 0x200 {
+            self.ov = false;
+        }
+        if skip != ind {
+            self.pc += 1;
+        }
+        if 0 != self.y & 0x800 {
+            panic!("Skip on Unknown Flags");
         }
     }
 
@@ -430,16 +460,21 @@ impl<'a> Pdp1<'a> {
 
     fn trace(&mut self) {
         /*
-         println!(
-             "PC: {:06o}, IO: {:06o}, AC: {:06o}, OV: {}, I: {:03o}, M[Y]: {:06o}, PF: {:06o}",
-             self.pc,
-             self.io,
-             self.ac,
-             self.ov,
-             (self.cm.read(self.pc) >> 12) & 0x3f, //1,
-             self.cm.read(self.y),
-             self.pf
-         );
+        let mut ov = 0;
+        if self.ov {
+            ov = 1;
+        }
+        println!(
+            "PC: {:06o}, IO: {:06o}, AC: {:06o}, OV: {}, I: {:02o}, Y: {:06o}, M[Y]: {:06o}, PF: {:06o}",
+            self.pc,
+            self.io,
+            self.ac,
+            ov,
+            self.cm.read(self.pc) >> 12,
+            self.y,
+            self.cm.read(self.y),
+            self.pf
+        );
         */
     }
 }
