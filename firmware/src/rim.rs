@@ -1,7 +1,9 @@
+use heapless::Vec;
+
 pub trait Rim {
     fn next(&mut self) -> u32;
 
-    fn bootstrap(&mut self, cm: &mut Vec<u32>) -> u16 {
+    fn bootstrap(&mut self, cm: &mut Vec<u32, 8192>) -> u16 {
         loop {
             let data: u32 = self.next();
             let ins: u8 = (data >> 12) as u8;

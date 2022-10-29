@@ -41,4 +41,5 @@ fn main() {
         }
     }
     println!("0x000000];");
+    println!("// counts: {}", i + 1);
 }

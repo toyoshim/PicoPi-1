@@ -73,3 +73,6 @@ debug-assertions = false
 incremental = false
 lto = 'fat'
 opt-level = 3
+
+[dependencies]
+heapless = "0.7.16"
