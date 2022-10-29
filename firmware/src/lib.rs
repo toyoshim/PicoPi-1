@@ -1,4 +1,4 @@
-//#![no_std]
+#![no_std]
 
 pub mod core_memory;
 pub use core_memory::CoreMemory;

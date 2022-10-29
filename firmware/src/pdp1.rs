@@ -429,15 +429,17 @@ impl<'a> Pdp1<'a> {
     }
 
     fn trace(&mut self) {
-        println!(
-            "PC: {:06o}, IO: {:06o}, AC: {:06o}, OV: {}, I: {:03o}, M[Y]: {:06o}, PF: {:06o}",
-            self.pc,
-            self.io,
-            self.ac,
-            self.ov,
-            (self.cm.read(self.pc) >> 12) & 0x3f, //1,
-            self.cm.read(self.y),
-            self.pf
-        );
+        /*
+         println!(
+             "PC: {:06o}, IO: {:06o}, AC: {:06o}, OV: {}, I: {:03o}, M[Y]: {:06o}, PF: {:06o}",
+             self.pc,
+             self.io,
+             self.ac,
+             self.ov,
+             (self.cm.read(self.pc) >> 12) & 0x3f, //1,
+             self.cm.read(self.y),
+             self.pf
+         );
+        */
     }
 }

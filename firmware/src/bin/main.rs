@@ -10,6 +10,11 @@ use defmt_rtt as _;
 use embedded_hal::digital::v2::OutputPin;
 use panic_probe as _;
 
+use pico_pi_1::CoreMemory;
+use pico_pi_1::Pdp1;
+use pico_pi_1::Rim;
+use pico_pi_1::RimSpacewar;
+
 // Provide an alias for our BSP so we can switch targets quickly.
 // Uncomment the BSP you included in Cargo.toml, the rest of the code does not need to change.
 use rp_pico as bsp;
@@ -44,7 +49,7 @@ fn main() -> ! {
     .ok()
     .unwrap();
 
-    let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
+    let mut _delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
 
     let pins = bsp::Pins::new(
         pac.IO_BANK0,
@@ -53,15 +58,14 @@ fn main() -> ! {
         &mut pac.RESETS,
     );
 
-    let mut led_pin = pins.led.into_push_pull_output();
+    let mut _led_pin = pins.led.into_push_pull_output();
 
+    let mut rim = RimSpacewar::new();
+    let mut cm = CoreMemory::new();
+    let pc = rim.bootstrap(&mut cm);
+    let mut cpu = Pdp1::new(&mut cm, &mut rim, pc);
     loop {
-        info!("on!");
-        led_pin.set_high().unwrap();
-        delay.delay_ms(500);
-        info!("off!");
-        led_pin.set_low().unwrap();
-        delay.delay_ms(500);
+        cpu.step();
     }
 }
 
