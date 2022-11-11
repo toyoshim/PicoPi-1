@@ -6,6 +6,9 @@
 pub mod core_memory;
 pub use core_memory::CoreMemory;
 
+pub mod display;
+pub use display::Display;
+
 pub mod pdp1;
 pub use pdp1::Pdp1;
 

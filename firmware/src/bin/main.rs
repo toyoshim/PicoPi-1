@@ -1,28 +1,26 @@
-//! Blinks the LED on a Pico board
-//!
-//! This will blink an LED attached to GP25, which is the pin the Pico uses for the on-board LED.
+// Copyright 2022 Takashi Toyoshima <toyoshim@gmail.com>.
+// Use of this source code is governed by a BSD-style license that can be found
+// in the LICENSE file.
 #![no_std]
 #![no_main]
 
-use bsp::entry;
 use defmt::*;
 use defmt_rtt as _;
 use embedded_hal::digital::v2::OutputPin;
 use panic_probe as _;
+use rp_pico::entry;
 
 use pico_pi_1::CoreMemory;
+use pico_pi_1::Display;
 use pico_pi_1::Pdp1;
 use pico_pi_1::Rim;
 use pico_pi_1::RimSpacewar;
 
-// Provide an alias for our BSP so we can switch targets quickly.
-// Uncomment the BSP you included in Cargo.toml, the rest of the code does not need to change.
-use rp_pico as bsp;
-// use sparkfun_pro_micro_rp2040 as bsp;
-
-use bsp::hal::{
+use rp_pico::hal::{
     clocks::{init_clocks_and_plls, Clock},
+    gpio::pin::FunctionPio0,
     pac,
+    pio::PIOExt,
     sio::Sio,
     watchdog::Watchdog,
 };
@@ -51,19 +49,45 @@ fn main() -> ! {
 
     let mut _delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
 
-    let pins = bsp::Pins::new(
+    let pins = rp_pico::Pins::new(
         pac.IO_BANK0,
         pac.PADS_BANK0,
         sio.gpio_bank0,
         &mut pac.RESETS,
     );
 
-    let mut _led_pin = pins.led.into_push_pull_output();
+    let mut led_pin = pins.led.into_push_pull_output();
+    led_pin.set_high().unwrap();
 
+    // TODO: move to display.rs.
+    pins.gpio6.into_mode::<FunctionPio0>();
+    pins.gpio7.into_mode::<FunctionPio0>();
+    pins.gpio8.into_mode::<FunctionPio0>();
+    pins.gpio9.into_mode::<FunctionPio0>();
+    pins.gpio10.into_mode::<FunctionPio0>();
+    pins.gpio11.into_mode::<FunctionPio0>();
+    pins.gpio12.into_mode::<FunctionPio0>();
+    pins.gpio13.into_mode::<FunctionPio0>();
+    pins.gpio14.into_mode::<FunctionPio0>();
+    pins.gpio15.into_mode::<FunctionPio0>();
+    pins.gpio16.into_mode::<FunctionPio0>();
+    pins.gpio17.into_mode::<FunctionPio0>();
+    pins.gpio18.into_mode::<FunctionPio0>();
+    pins.gpio19.into_mode::<FunctionPio0>();
+    pins.gpio20.into_mode::<FunctionPio0>();
+    pins.gpio21.into_mode::<FunctionPio0>();
+    pins.gpio22.into_mode::<FunctionPio0>();
+    //
+    pins.gpio26.into_mode::<FunctionPio0>();
+    pins.gpio27.into_mode::<FunctionPio0>();
+    pins.gpio28.into_mode::<FunctionPio0>();
+
+    let (mut pio, sm0, _, _, _) = pac.PIO0.split(&mut pac.RESETS);
+    let mut display = Display::new(&mut pio, sm0);
     let mut rim = RimSpacewar::new();
     let mut cm = CoreMemory::new();
     let pc = rim.bootstrap(&mut cm);
-    let mut cpu = Pdp1::new(&mut cm, &mut rim, pc);
+    let mut cpu = Pdp1::new(&mut cm, &mut rim, &mut display, pc);
     loop {
         cpu.step();
     }

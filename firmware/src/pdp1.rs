@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be found
 // in the LICENSE file.
 use crate::CoreMemory;
+use crate::Display;
 use crate::Rim;
 
 pub struct Pdp1<'a> {
@@ -15,12 +16,18 @@ pub struct Pdp1<'a> {
     ov: bool,
     cm: &'a mut CoreMemory,
     rim: &'a mut dyn Rim,
+    display: &'a mut Display,
 }
 
 static FLAGS: [u8; 8] = [0x00, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01, 0x3f];
 
 impl<'a> Pdp1<'a> {
-    pub fn new(cm: &'a mut CoreMemory, rim: &'a mut dyn Rim, pc: u16) -> Self {
+    pub fn new(
+        cm: &'a mut CoreMemory,
+        rim: &'a mut dyn Rim,
+        display: &'a mut Display,
+        pc: u16,
+    ) -> Self {
         Pdp1 {
             t: 0,
             io: 0,
@@ -30,8 +37,9 @@ impl<'a> Pdp1<'a> {
             pf: 0,
             xct: false,
             ov: false,
-            cm: cm,
-            rim: rim,
+            cm,
+            rim,
+            display,
         }
     }
 
@@ -452,7 +460,9 @@ impl<'a> Pdp1<'a> {
                 self.io = self.rim.next();
             }
             0o007 => {
-                // TODO: Display
+                let x = (self.ac as u16 >> 2) + 0x8000;
+                let y = (self.io as u16 >> 2) + 0x8000;
+                self.display.set(x, y);
             }
             0o011 => {
                 // TODO: Spacewar Controllers
