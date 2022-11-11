@@ -1,3 +1,6 @@
+// Copyright 2022 Takashi Toyoshima <toyoshim@gmail.com>.
+// Use of this source code is governed by a BSD-style license that can be found
+// in the LICENSE file.
 use std::io;
 
 fn read<R: io::Read>(read: &mut R) -> Result<u32, io::Error> {
