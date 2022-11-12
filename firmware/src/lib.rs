@@ -15,5 +15,8 @@ pub use pdp1::Pdp1;
 pub mod rim;
 pub use rim::Rim;
 
+pub mod rim_snowflake;
+pub use rim_snowflake::RimSnowflake;
+
 pub mod rim_spacewar;
 pub use rim_spacewar::RimSpacewar;

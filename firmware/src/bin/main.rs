@@ -14,6 +14,7 @@ use pico_pi_1::CoreMemory;
 use pico_pi_1::Display;
 use pico_pi_1::Pdp1;
 use pico_pi_1::Rim;
+//use pico_pi_1::RimSnowflake;
 use pico_pi_1::RimSpacewar;
 
 use rp_pico::hal::{
@@ -85,6 +86,7 @@ fn main() -> ! {
     let (mut pio, sm0, _, _, _) = pac.PIO0.split(&mut pac.RESETS);
     let mut display = Display::new(&mut pio, sm0);
     let mut rim = RimSpacewar::new();
+    //let mut rim = RimSnowflake::new();
     let mut cm = CoreMemory::new();
     let pc = rim.bootstrap(&mut cm);
     let mut cpu = Pdp1::new(&mut cm, &mut rim, &mut display, pc);

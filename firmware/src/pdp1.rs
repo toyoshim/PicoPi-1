@@ -460,9 +460,10 @@ impl<'a> Pdp1<'a> {
                 self.io = self.rim.next();
             }
             0o007 => {
-                let x = (self.ac as u16 >> 2) + 0x8000;
-                let y = (self.io as u16 >> 2) + 0x8000;
-                self.display.set(x, y);
+                let x = ((self.ac >> 2) + 0x8000) as u16;
+                let y = ((self.io >> 2) + 0x8000) as u16;
+                let ym = (0x10000 - y as u32) as u16;
+                self.display.set(x, ym);
             }
             0o011 => {
                 // TODO: Spacewar Controllers
