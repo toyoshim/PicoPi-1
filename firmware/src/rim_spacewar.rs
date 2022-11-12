@@ -18,7 +18,7 @@ impl Rim for RimSpacewar {
 
 // Following RIM dump is a copy of the original Spacewar!
 // https://en.wikipedia.org/wiki/Spacewar!
-// Steve Russell, et all owns the copyright.
+// Steve Russell, et al. owns the copyright.
 static ROM: [u32; 2699] = [
     0x01afe9, 0x03b002, 0x01afea, 0x01aff0, 0x01afeb, 0x008ff0, 0x01afec, 0x01affe, 0x01afed,
     0x03b002, 0x01afee, 0x01afff, 0x01afef, 0x03b002, 0x01aff0, 0x000000, 0x01aff1, 0x011ff0,
